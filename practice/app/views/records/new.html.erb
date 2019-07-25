@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="row">
+    <h1>提交答案</h1>
+  </div>
+
+  <%-# error_messages_for @record -%>
+  <%-# render 'form', record: @record -%>
+
+  <div class="row">
+    <%= form_for @record, class: '' do |f| %>
+      <%= f.error_messages %>
+
+      <div class="field form-group">
+        <%= f.label :teamid, "小隊" %>
+        <%= f.number_field :teamid, class: 'form-control' %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :chalid, "題號" %>
+        <%= f.number_field :chalid, class: 'form-control' %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :name, "隊員暱稱" %>
+        <%= f.text_field :name, class: 'form-control' %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :answer, "答案" %>
+        <%= f.text_field :answer, class: 'form-control' %>
+      </div>
+
+      <div class="actions form-group">
+        <%= f.submit "審判", class: 'btn btn-outline-success' %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="row">
+    <%= link_to 'Back', records_path %>
+  </div>
+</div>

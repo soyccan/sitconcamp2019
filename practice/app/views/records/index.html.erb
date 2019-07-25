@@ -1,0 +1,98 @@
+<div class="container">
+  <% if notice != nil %>
+    <div class="row">
+      <div class="col alert alert-success" role="alert">
+        <%= notice %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col">
+      <h1>計分版</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <%= link_to '提交答案', new_record_path, class: 'btn btn-outline-primary' %>
+    </div>
+
+    <div class="col">
+      <% for i in (1..Record.all.count/MyConstants::MAX_ROWS+1) %>
+        <%= link_to i.to_s, records_path + '/' + i.to_s %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col col-1 col-lg-4">
+      <table id="scoreboard" class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th>小隊</th>
+            <th>總分</th>
+            <th>答對題號</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @team_rank_by_points.each do |teamid| %>
+            <tr>
+              <td><%= teamid %></td>
+              <td><%= @team_points[teamid] %></td>
+              <td>
+                <% @team_suc_chals[teamid].each do |chalid| %>
+                  <button class="btn btn-outline-success"><%= chalid %></button>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col col-1 col-lg-8">
+      <table class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th>小隊</th>
+            <th>題號</th>
+            <th>隊員暱稱</th>
+            <th>用 Python 送 HTTP Request</th>
+            <th>正確</th>
+            <th>提交時間</th>
+            <!--<th colspan="3"></th>-->
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @records.each do |record| %>
+            <tr>
+              <td><%= record.teamid %></td>
+              <td><%= record.chalid %></td>
+              <td><%= record.name %></td>
+              <td><%= not record.diy.blank? %></td>
+              <td>
+                <% if record.successful %>
+                  <span style="color: green; font-weight: bold">true</span>
+                <% else %>
+                  <span>false</span>
+                <% end %>
+              </td>
+              <td><%= record.created_at %></td>
+              <% if false # block comment %>
+                <td><%= link_to 'Show', record %></td>
+                <td><%= link_to 'Edit', edit_record_path(record) %></td>
+                <td><%= link_to 'Destroy', record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<br>
+
