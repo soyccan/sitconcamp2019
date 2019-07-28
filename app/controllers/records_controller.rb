@@ -122,7 +122,7 @@ private
     @team_points = {}
     # store teamid, ranked by their total points
     @team_rank_by_points = []
-    for i in (1..MyConstants::TOTAL_TEAMS)
+    for i in (0..MyConstants::TOTAL_TEAMS)
       @team_suc_chals[i] = []
       @team_points[i] = 0
       @team_rank_by_points << i
