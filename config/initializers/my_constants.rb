@@ -8,7 +8,7 @@ class MyConstants
     1 => ["Japan", 10],
     2 => ["Netherlands", 15],
     3 => ["Brazil", 20],
-    4 => ["5", 30],
+    4 => ["66", 30],
   }
 
   MAX_ROWS = 10
