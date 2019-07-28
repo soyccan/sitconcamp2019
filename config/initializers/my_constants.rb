@@ -6,8 +6,8 @@ class MyConstants
   CHALLENGES = {
     # chalid, answer, points
     1 => ["Japan", 10],
-    2 => ["Spain", 15],
-    3 => ["Canada", 20],
+    2 => ["Netherlands", 15],
+    3 => ["Brazil", 20],
     4 => ["5", 30],
   }
 

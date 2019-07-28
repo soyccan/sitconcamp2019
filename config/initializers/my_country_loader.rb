@@ -11,10 +11,10 @@ class MyCountryLoader < Rails::Application
     first_line = true
     IO.foreach('countries.csv') do |line|
       if first_line
-        all_props = line.split(',')
+        all_props = line.strip.split(',')
         first_line = false
       else
-        fields = line.split(',')
+        fields = line.strip.split(',')
         country = {}
         for i in (0...all_props.length)
           country[ all_props[i] ] = fields[i]
