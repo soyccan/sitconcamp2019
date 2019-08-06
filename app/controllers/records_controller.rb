@@ -161,7 +161,7 @@ private
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def record_params
-    params.require(:record).permit(:teamid, :chalid, :name, :answer, :diy)
+    params.permit(:teamid, :chalid, :name, :answer, :diy)
   end
 
 end
