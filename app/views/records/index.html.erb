@@ -76,7 +76,7 @@
 
         <tbody>
           <% @records.each do |record| %>
-            <% if @only_show_teamid != nil and record.teamid != @only_show_teamid %>
+            <% if @only_show_teamid != nil and record.teamid.to_s != @only_show_teamid %>
               <% next %>
             <% end %>
             <tr>
