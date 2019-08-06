@@ -14,11 +14,17 @@ class RecordsController < ApplicationController
 
     @only_show_teamid = params[:teamid]
 
-    @records =
-      Record.all
-      .order(created_at: :desc)
-      .offset((page.to_i - 1) * MyConstants::MAX_ROWS)
-      .limit(MyConstants::MAX_ROWS)
+    if @only_show_teamid == nil
+        @records =
+          Record.all
+          .order(created_at: :desc)
+          .offset((page.to_i - 1) * MyConstants::MAX_ROWS)
+          .limit(MyConstants::MAX_ROWS)
+    else
+        @records =
+          Record.all
+          .order(created_at: :desc)
+    end
 
     # scoreboard
     @team_points = nil
@@ -44,7 +50,11 @@ class RecordsController < ApplicationController
   # POST /records
   # POST /records.json
   def create
-    _record_params = record_params
+      if params[:diy] != nil
+        _record_params = record_params_json
+      else
+        _record_params = record_params
+      end
     successful = check_answer(_record_params[:chalid], _record_params[:answer])
 
     @record = Record.new(_record_params)
@@ -162,8 +172,12 @@ private
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
-  def record_params
+  def record_params_json
     params.permit(:teamid, :chalid, :name, :answer, :diy)
+  end
+
+  def record_params
+    params.require(:record).permit(:teamid, :chalid, :name, :answer, :diy)
   end
 
 end
