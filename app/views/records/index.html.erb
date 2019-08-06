@@ -28,7 +28,7 @@
     <div class="col">
       TEAM:
       <% for i in (1..MyConstants::TOTAL_TEAMS) %>
-        <%= link_to i.to_s, '?' + i.to_s %>
+        <%= link_to i.to_s, '?teamid=' + i.to_s %>
       <% end %>
     </div>
   </div>
