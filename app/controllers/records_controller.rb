@@ -118,7 +118,7 @@ private
     # problems at which each team succeeds
     raw_suc_records = Record.select("teamid, chalid, diy")
                             .where(successful: true)
-                            .order(:teamid, :chalid, diy: :desc)
+                            .order(:teamid, :chalid, diy: :asc)
     # remove duplicate records
     suc_records = []
     for rec in raw_suc_records
@@ -126,7 +126,12 @@ private
             or suc_records.last.teamid != rec.teamid \
             or suc_records.last.chalid != rec.chalid
         suc_records << rec
+
+      elsif suc_records.last.diy.blank? and not rec.diy.blank?
+        suc_records.pop
+        suc_records << rec
       end
+
     end
 
     # suc_chals and points use teamid as key
