@@ -12,6 +12,8 @@ class RecordsController < ApplicationController
       page = params[:page]
     end
 
+    @only_show_teamid = params[:teamid]
+
     @records =
       Record.all
       .order(created_at: :desc)
