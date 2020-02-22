@@ -19,8 +19,16 @@
     </div>
 
     <div class="col">
+      PAGE:
       <% for i in (1..Record.all.count/MyConstants::MAX_ROWS+1) %>
         <%= link_to i.to_s, records_path + '/' + i.to_s %>
+      <% end %>
+    </div>
+
+    <div class="col">
+      TEAM:
+      <% for i in (1..MyConstants::TOTAL_TEAMS) %>
+        <%= link_to i.to_s, records_path + '/' + '?teamid=' + i.to_s %>
       <% end %>
     </div>
   </div>
@@ -68,6 +76,9 @@
 
         <tbody>
           <% @records.each do |record| %>
+            <% if @only_show_teamid != nil and record.teamid.to_s != @only_show_teamid %>
+              <% next %>
+            <% end %>
             <tr>
               <td><%= record.teamid %></td>
               <td><%= record.chalid %></td>

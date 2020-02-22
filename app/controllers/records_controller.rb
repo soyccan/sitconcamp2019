@@ -12,11 +12,19 @@ class RecordsController < ApplicationController
       page = params[:page]
     end
 
-    @records =
-      Record.all
-      .order(created_at: :desc)
-      .offset((page.to_i - 1) * MyConstants::MAX_ROWS)
-      .limit(MyConstants::MAX_ROWS)
+    @only_show_teamid = params[:teamid]
+
+    if @only_show_teamid == nil
+        @records =
+          Record.all
+          .order(created_at: :desc)
+          .offset((page.to_i - 1) * MyConstants::MAX_ROWS)
+          .limit(MyConstants::MAX_ROWS)
+    else
+        @records =
+          Record.all
+          .order(created_at: :desc)
+    end
 
     # scoreboard
     @team_points = nil
@@ -42,7 +50,11 @@ class RecordsController < ApplicationController
   # POST /records
   # POST /records.json
   def create
-    _record_params = record_params
+      if params[:diy] != nil
+        _record_params = record_params_json
+      else
+        _record_params = record_params
+      end
     successful = check_answer(_record_params[:chalid], _record_params[:answer])
 
     @record = Record.new(_record_params)
@@ -106,7 +118,7 @@ private
     # problems at which each team succeeds
     raw_suc_records = Record.select("teamid, chalid, diy")
                             .where(successful: true)
-                            .order(:teamid, :chalid, diy: :desc)
+                            .order(:teamid, :chalid, diy: :asc)
     # remove duplicate records
     suc_records = []
     for rec in raw_suc_records
@@ -114,7 +126,12 @@ private
             or suc_records.last.teamid != rec.teamid \
             or suc_records.last.chalid != rec.chalid
         suc_records << rec
+
+      elsif suc_records.last.diy.blank? and not rec.diy.blank?
+        suc_records.pop
+        suc_records << rec
       end
+
     end
 
     # suc_chals and points use teamid as key
@@ -122,7 +139,7 @@ private
     @team_points = {}
     # store teamid, ranked by their total points
     @team_rank_by_points = []
-    for i in (1..MyConstants::TOTAL_TEAMS)
+    for i in (0..MyConstants::TOTAL_TEAMS)
       @team_suc_chals[i] = []
       @team_points[i] = 0
       @team_rank_by_points << i
@@ -160,6 +177,10 @@ private
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
+  def record_params_json
+    params.permit(:teamid, :chalid, :name, :answer, :diy)
+  end
+
   def record_params
     params.require(:record).permit(:teamid, :chalid, :name, :answer, :diy)
   end
